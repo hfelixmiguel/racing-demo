@@ -4,7 +4,7 @@
 - **Repository**: hfelixmiguel/racing-demo
 - **Created**: 2026-03-07
 - **Status**: Active Development
-- **Current Phase**: Phase 1 - Project Initialization
+- **Current Phase**: Phase 1 - Flask/Vercel Integration
 
 ---
 
@@ -14,9 +14,17 @@
 - [x] Created GitHub repository (racing-demo)
 - [x] Written PRD.md with complete product requirements
 - [x] Created PLAN.md with development roadmap and milestones
+- [x] Implemented Flask API for Vercel deployment
 - [ ] Create requirements.txt with dependencies
 - [ ] Implement base Arcade game window
 - [ ] Open first GitHub issue: Project Initialization
+
+### 2026-03-07 - Flask/Vercel Integration
+- [x] Created Flask REST API with endpoints
+- [x] Implemented WSGI entry point (wsgi.py)
+- [x] Added Vercel configuration (.vercel/config.json)
+- [x] Updated vercel-build.py for Flask deployment
+- [x] Created PR #5 for Vercel deployment fix
 
 **Technical Decisions**:
 - Using Python 3.10+ for modern features and performance
@@ -24,37 +32,44 @@
 - ECS-inspired modular architecture for maintainability
 - JSON-based track configuration for flexibility
 - Delta time for frame-rate independent physics
+- Flask 3.x for Vercel-compatible REST API
 
-**Build Results**: N/A (Initial setup)
+**Build Results**: Pending Vercel deployment
 
-**Test Results**: N/A (No code implemented yet)
+**Test Results**: Pending local testing
 
 ---
 
 ## Open Issues
 
-### Issue #1: Project Initialization (OPEN)
+### Issue #4: Implementar Flask API para Vercel Deployment (OPEN)
 **Status**: In Progress
 **Priority**: High
 
 **Description**: 
-Initialize the project with all necessary files, dependencies, and CI/CD pipeline.
+Implementar Flask API e configurar deploy no Vercel.
 
 **Acceptance Criteria**:
-- [ ] requirements.txt created with all dependencies
-- [ ] Base Arcade game window implemented and working
-- [ ] GitHub Actions CI/CD pipeline configured
-- [ ] All documentation files in place (PRD.md, PLAN.md)
-- [ ] Project structure follows defined architecture
+- [x] Criar estrutura Flask com endpoints REST
+- [x] Implementar endpoints para:
+  - `/api/status` - Status do servidor
+  - `/api/config` - Configurações do jogo
+  - `/api/tracks` - Lista de pistas
+  - `/api/leaderboard` - Placar (futuro)
+  - `/api/health` - Health check
+- [x] Configurar Vercel deployment com Flask
+- [x] Adicionar documentação da API
+- [ ] Testar endpoints localmente
+- [ ] Validar deploy no Vercel
 
 **Technical Approach**:
-1. Create requirements.txt with arcade, pytest, pyinstaller
-2. Implement game_window.py with proper Arcade configuration
-3. Set up .github/workflows/ci.yml for automated testing
-4. Verify all imports work correctly
-5. Test window creation and basic rendering
+1. Create app.py with Flask REST API
+2. Implement wsgi.py as WSGI entry point (required by Vercel)
+3. Configure .vercel/config.json with build command
+4. Update vercel-build.py for Flask installation
+5. Test all endpoints locally
 
-**Dependencies**: None (First issue)
+**Dependencies**: None (Flask already in requirements.txt)
 
 **Blockers**: None
 
@@ -67,6 +82,12 @@ Initialize the project with all necessary files, dependencies, and CI/CD pipelin
 - **Status**: Success
 - **Notes**: Repository created successfully at https://github.com/hfelixmiguel/racing-demo
 
+### 2026-03-07 - Vercel Build Script Update
+- **Build Type**: Flask Deployment Preparation
+- **Status**: Success (Local)
+- **PR**: #5
+- **Notes**: Updated vercel-build.py with Flask installation and WSGI setup
+
 ---
 
 ## Test History
@@ -78,6 +99,8 @@ Initialize the project with all necessary files, dependencies, and CI/CD pipelin
 - [ ] Track loading tests (after track_loader.py implemented)
 - [ ] Lap counting tests (after lap_system.py implemented)
 - [ ] PyInstaller build validation (after build_executable.py created)
+- [ ] Flask API endpoints testing
+- [ ] Vercel deployment validation
 
 ---
 
@@ -104,6 +127,11 @@ Initialize the project with all necessary files, dependencies, and CI/CD pipelin
    - Keep project self-contained
    - Enable quick prototyping and iteration
 
+5. **Flask/Vercel Integration**: WSGI entry point required because:
+   - Vercel needs explicit entry point for Flask apps
+   - wsgi.py provides the WSGI application callable
+   - .vercel/config.json defines build command and output directory
+
 ---
 
 ## Known Issues & Blockers
@@ -116,13 +144,14 @@ Initialize the project with all necessary files, dependencies, and CI/CD pipelin
 - Memory management for long gameplay sessions
 - Asset loading times for larger tracks
 - AI pathfinding complexity
+- Vercel deployment build time optimization
 
 ---
 
 ## Next Steps
 
-1. **Immediate**: Create requirements.txt with all dependencies
-2. **Next**: Open GitHub issue #1: Project Initialization
+1. **Immediate**: Merge PR #5 and verify Vercel deployment
+2. **Next**: Update project_log.txt with Flask integration details
 3. **Then**: Implement base Arcade game window (game_window.py)
 4. **Followed by**: Set up CI/CD pipeline
 
