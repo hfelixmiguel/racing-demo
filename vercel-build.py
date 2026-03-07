@@ -1,121 +1,109 @@
 """
 Vercel Build Script for Racing Demo
 
-This script prepares the Flask application for deployment on Vercel.
-It installs dependencies and sets up the environment properly.
+This script handles the build process for deploying the racing demo
+application to Vercel. It sets up the virtual environment, installs
+dependencies, and prepares the application for deployment.
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 
-def install_dependencies():
-    """Install Python dependencies from requirements.txt."""
-    print("📦 Installing dependencies...")
+def setup_python_environment():
+    """Set up Python virtual environment."""
+    venv_path = Path('.venv')
     
+    # Check if venv already exists
+    if venv_path.exists():
+        print('Virtual environment already exists. Updating...')
+        subprocess.run([sys.executable, 'ensurepip', '--upgrade'], check=True)
+        subprocess.run([str(venv_path / 'bin' / 'python'), '-m', 'pip', 'install', '--upgrade', 'pip'], check=True)
+    else:
+        print('Creating virtual environment...')
+        subprocess.run([sys.executable, '-m', 'venv', str(venv_path)], check=True)
+    
+    # Get venv Python executable
+    if os.name == 'nt':  # Windows
+        python_exec = str(venv_path / 'Scripts' / 'python')
+        pip_exec = str(venv_path / 'Scripts' / 'pip')
+    else:  # Linux/Mac
+        python_exec = str(venv_path / 'bin' / 'python')
+        pip_exec = str(venv_path / 'bin' / 'pip')
+    
+    return python_exec, pip_exec
+
+
+def install_dependencies(pip_exec):
+    """Install Python dependencies from requirements.txt."""
+    print('Installing dependencies...')
+    result = subprocess.run(
+        [pip_exec, 'install', '-r', 'requirements.txt'],
+        capture_output=True,
+        text=True
+    )
+    
+    if result.returncode != 0:
+        print('Error installing dependencies:')
+        print(result.stderr)
+        raise RuntimeError(f'Failed to install dependencies: {result.stderr}')
+    
+    print('Dependencies installed successfully.')
+    return True
+
+
+def verify_installation(python_exec):
+    """Verify that key dependencies are installed."""
+    import sys
+    
+    # Test imports
     try:
-        # Install Flask and other dependencies
-        result = subprocess.run(
-            [sys.executable, "-m", "pip", "install", "-r", "requirements.txt"],
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        
-        if result.returncode == 0:
-            print("✅ Dependencies installed successfully")
-            return True
-        else:
-            print(f"❌ Failed to install dependencies:")
-            print(result.stderr)
-            return False
-            
-    except Exception as e:
-        print(f"❌ Error installing dependencies: {e}")
-        return False
-
-
-def verify_flask():
-    """Verify Flask is installed correctly."""
-    print("🔍 Verifying Flask installation...")
+        import arcade
+        print(f'✓ Arcade version {arcade.__version__}')
+    except ImportError as e:
+        raise RuntimeError(f'Arcade not installed: {e}')
     
     try:
         import flask
-        print(f"✅ Flask version: {flask.__version__}")
-        return True
+        print(f'✓ Flask version {flask.__version__}')
     except ImportError as e:
-        print(f"❌ Failed to import Flask: {e}")
-        return False
-
-
-def create_wsgi_entry():
-    """Create WSGI entry point if it doesn't exist."""
-    print("📝 Checking WSGI entry point...")
+        raise RuntimeError(f'Flask not installed: {e}')
     
-    wsgi_path = Path("wsgi.py")
+    try:
+        import numpy
+        print(f'✓ NumPy version {numpy.__version__}')
+    except ImportError as e:
+        raise RuntimeError(f'NumPy not installed: {e}')
     
-    if not wsgi_path.exists():
-        print("⚠️  Creating wsgi.py entry point...")
-        
-        wsgi_content = '''"""
-WSGI Entry Point for Vercel Deployment
-
-This module provides the WSGI application callable that Vercel uses
-to deploy Flask applications. It's required for Vercel to recognize
-the Flask app as the entrypoint.
-"""
-
-from app import app as flask_app
-
-
-def application(environ, start_response):
-    """
-    WSGI Application Callable
-    
-    This is the entry point that Vercel uses to run the Flask application.
-    
-    Args:
-        environ: WSGI environment dictionary
-        start_response: Callable that takes status code and headers
-        
-    Returns:
-        Iterable of response bodies
-    """
-    return flask_app.wsgi_app(environ, start_response)
-'''
-        
-        wsgi_path.write_text(wsgi_content)
-        print("✅ Created wsgi.py")
-    else:
-        print("✅ wsgi.py already exists")
+    return True
 
 
 def main():
     """Main build function."""
-    print("=" * 60)
-    print("🚀 Racing Demo - Vercel Build")
-    print("=" * 60)
+    print('=' * 60)
+    print('Vercel Build Script for Racing Demo')
+    print('=' * 60)
     
-    # Install dependencies
-    if not install_dependencies():
-        print("\n❌ Build failed: Dependencies installation error")
-        return False
-    
-    # Verify Flask
-    if not verify_flask():
-        print("\n❌ Build failed: Flask verification error")
-        return False
-    
-    # Create WSGI entry point
-    create_wsgi_entry()
-    
-    print("\n" + "=" * 60)
-    print("✅ Vercel build completed successfully!")
-    print("=" * 60)
-    return True
+    try:
+        # Setup environment
+        python_exec, pip_exec = setup_python_environment()
+        
+        # Install dependencies
+        install_dependencies(pip_exec)
+        
+        # Verify installation
+        verify_installation(python_exec)
+        
+        print('=' * 60)
+        print('Build completed successfully!')
+        print('=' * 60)
+        
+    except Exception as e:
+        print(f'Build failed: {e}')
+        sys.exit(1)
 
 
-if __name__ == "__main__":
-    success = main()
-    sys.exit(0 if success else 1)
+if __name__ == '__main__':
+    main()
