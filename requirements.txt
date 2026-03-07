@@ -1,13 +1,9 @@
 # Core Game Engine
-arcade>=2.7.0
+arcade>=2.30.0
 numpy>=1.24.0
 
 # Testing
 pytest>=7.4.0
 
-# Packaging (local development only)
+# Packaging (standalone executable)
 pyinstaller>=6.0.0
-
-# Vercel Deployment
-flask>=3.0.0
-gunicorn>=21.0.0
