@@ -1,106 +1,105 @@
 """
-Flask API for Racing Demo - Vercel Deployment
+WSGI Application Entry Point for Vercel Deployment
 
-This module provides a REST API backend for the racing game,
-optimized for deployment on Vercel platform.
+This module serves as the main entry point for the Flask application
+when deployed on Vercel. It provides WSGI compatibility and handles
+HTTP requests from the Vercel platform.
 """
 
-from flask import Flask, jsonify
-from datetime import datetime
+from flask import Flask, jsonify, request
 import os
 
+# Create Flask application instance
 app = Flask(__name__)
 
-# Game configuration
-GAME_CONFIG = {
-    "game_version": "1.0.0",
-    "max_players": 4,
-    "supported_tracks": ["oval", "city", "desert"],
-    "features": {
-        "leaderboard": True,
-        "multiplayer": False,
-        "ai_opponent": True,
-        "procedural_tracks": False
-    },
-    "physics": {
-        "max_speed": 200,
-        "acceleration": 150,
-        "friction": 0.98,
-        "turning_radius": 0.3
-    }
-}
+# Configuration
+app.config['ENV'] = os.environ.get('FLASK_ENV', 'production')
+app.config['DEBUG'] = app.config['ENV'] != 'production'
+
 
 @app.route('/')
-def index():
-    """Root endpoint - API information"""
+def home():
+    """Root endpoint - returns game information."""
     return jsonify({
-        "name": "Racing Demo API",
-        "version": GAME_CONFIG["game_version"],
-        "description": "REST API for 2D Racing Game",
-        "endpoints": {
-            "/api/status": "Get server status",
-            "/api/config": "Get game configuration",
-            "/api/tracks": "List available tracks",
-            "/api/leaderboard": "Get leaderboard (coming soon)",
-            "/api/health": "Health check"
-        }
-    })
-
-@app.route('/api/status', methods=['GET'])
-def status():
-    """Get server status and runtime information"""
-    return jsonify({
-        "status": "running",
-        "version": GAME_CONFIG["game_version"],
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-        "environment": os.environ.get("VERCEL_ENV", "development"),
-        "build_id": os.environ.get("VERCEL_GIT_COMMIT_SHA", "unknown")
-    })
-
-@app.route('/api/config', methods=['GET'])
-def config():
-    """Get complete game configuration"""
-    return jsonify(GAME_CONFIG)
-
-@app.route('/api/tracks', methods=['GET'])
-def tracks():
-    """List all available tracks with metadata"""
-    track_info = {
-        "oval": {"name": "Oval Track", "length_km": 4.0, "difficulty": "easy"},
-        "city": {"name": "City Circuit", "length_km": 3.2, "difficulty": "medium"},
-        "desert": {"name": "Desert Rally", "length_km": 5.5, "difficulty": "hard"}
-    }
-    
-    return jsonify({
-        "tracks": GAME_CONFIG["supported_tracks"],
-        "details": track_info,
-        "count": len(GAME_CONFIG["supported_tracks"])
-    })
-
-@app.route('/api/leaderboard', methods=['GET'])
-def leaderboard():
-    """Get leaderboard (placeholder for future implementation)"""
-    return jsonify({
-        "leaderboard": [],
-        "message": "Leaderboard feature not yet implemented",
-        "coming_soon": True,
-        "estimated_release": "v1.1.0"
-    })
-
-@app.route('/api/health', methods=['GET'])
-def health():
-    """Health check endpoint for load balancers"""
-    return jsonify({
-        "healthy": True,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-        "service": "racing-demo-api"
+        'name': '2D Racing Game Demo',
+        'version': '1.0.0',
+        'engine': 'Arcade Python Library',
+        'status': 'running',
+        'message': 'Game server is running on Vercel'
     }), 200
 
-@app.route('/api/pong', methods=['GET'])
-def pong():
-    """Simple ping-pong endpoint for quick health checks"""
-    return jsonify({"ping": "pong"})
 
+@app.route('/health')
+def health_check():
+    """Health check endpoint for monitoring."""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'racing-demo',
+        'environment': app.config['ENV']
+    }), 200
+
+
+@app.route('/api/game/status')
+def game_status():
+    """Returns current game status information."""
+    return jsonify({
+        'game': 'racing-demo',
+        'features': [
+            '2D Racing Gameplay',
+            'Physics-based Car Control',
+            'Multiple Tracks',
+            'Lap Timing System',
+            'AI Opponent',
+            'Procedural Track Generation'
+        ],
+        'deployment': {
+            'platform': 'Vercel',
+            'engine': 'Flask WSGI'
+        }
+    }), 200
+
+
+@app.route('/api/game/info')
+def game_info():
+    """Returns detailed game information."""
+    return jsonify({
+        'title': '2D Racing Game Demo',
+        'description': 'A top-down 2D racing game built with Python Arcade engine',
+        'controls': {
+            'accelerate': ['W', 'Up Arrow'],
+            'brake': ['S', 'Down Arrow'],
+            'turn_left': ['A', 'Left Arrow'],
+            'turn_right': ['D', 'Right Arrow']
+        },
+        'features': {
+            'physics': 'Realistic car physics with acceleration, braking, and steering',
+            'tracks': 'Multiple configurable tracks from JSON files',
+            'lap_system': 'Complete lap counting and timing system',
+            'ai_opponent': 'Basic AI opponent that follows checkpoints',
+            'camera': 'Smooth camera following the player car'
+        }
+    }), 200
+
+
+@app.errorhandler(404)
+def not_found(error):
+    """Handle 404 errors."""
+    return jsonify({
+        'error': 'Not Found',
+        'message': 'The requested resource was not found'
+    }), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle 500 errors."""
+    return jsonify({
+        'error': 'Internal Server Error',
+        'message': 'An unexpected error occurred'
+    }), 500
+
+
+# WSGI Entry Point for Vercel
 if __name__ == '__main__':
-    # Development mode only
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Only run development server when executed directly
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
