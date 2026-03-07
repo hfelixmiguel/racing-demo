@@ -1,13 +1,13 @@
 # Core Game Engine
-arcade>=2.7.0 --no-deps
-numpy>=1.24.0 --no-deps
+arcade>=2.7.0
+numpy>=1.24.0
 
 # Testing
-pytest>=7.4.0 --no-deps
+pytest>=7.4.0
 
 # Packaging (local development only)
-pyinstaller>=6.0.0 --no-deps
+pyinstaller>=6.0.0
 
-# Vercel Deployment - Use pip flags for externally-managed environments
+# Vercel Deployment
 flask>=3.0.0
 gunicorn>=21.0.0
