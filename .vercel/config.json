@@ -1,0 +1,1 @@
+{"buildCommand": "pip install -r requirements.txt && python vercel-build.py", "outputDirectory": ".vercel/output"}
