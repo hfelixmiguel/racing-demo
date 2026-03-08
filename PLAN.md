@@ -1,5 +1,7 @@
 # Development Plan - 2D Racing Game Demo
 
+- github project: https://github.com/hfelixmiguel/racing-demo
+
 ## Current Status: Phase 1 - Project Initialization ✅
 
 ### Completed Tasks
@@ -7,7 +9,7 @@
 - [x] Write PRD.md (Product Requirements Document)
 - [x] Initialize project structure planning
 - [ ] Implement base Arcade game window
-- [ ] Create requirements.txt
+- [x] Create requirements.txt with dependencies
 - [ ] Open first GitHub issue: Project Initialization
 
 ---
@@ -20,7 +22,7 @@
 - [x] Initialize Python project
 - [x] Configure Arcade engine setup
 - [ ] Implement game window with proper configuration
-- [ ] Create requirements.txt with all dependencies
+- [x] Create requirements.txt with dependencies
 - [ ] Open GitHub issue for Project Initialization
 - [ ] Set up CI/CD pipeline (GitHub Actions)
 
@@ -36,7 +38,7 @@
   - Set up camera system
   - Handle window events (close, resize)
   - Implement frame rate control
-  
+
 - [ ] Implement game_loop.py
   - Main loop with delta time
   - Update and draw phases
@@ -53,7 +55,7 @@
   - Position, rotation, velocity properties
   - Color and size configuration
   - Wheel rendering
-  
+
 - [ ] Implement physics system (game/systems/physics_system.py)
   - Acceleration and braking logic
   - Steering with speed-dependent turning
@@ -71,12 +73,12 @@
   - Parse JSON track definitions
   - Load track boundaries and checkpoints
   - Validate track data
-  
+
 - [ ] Create first track: Oval Track (tracks/oval_track.json)
   - Define start position
   - Set up checkpoint sequence
   - Configure track boundaries
-  
+
 - [ ] Implement track renderer (game/tracks/track_renderer.py)
   - Draw track surface
   - Render boundaries and checkpoints
@@ -94,7 +96,7 @@
   - Count laps completed
   - Calculate lap times with milliseconds
   - Track best lap time
-  
+
 - [ ] Create checkpoint entity (game/entities/checkpoint.py)
   - Position and visual representation
   - Collision detection for checkpoint crossing
@@ -111,13 +113,13 @@
   - Select Track option
   - Exit Game option
   - Track selection interface
-  
+
 - [ ] Implement HUD (game/ui/hud.py)
   - Display current lap number
   - Show current lap time
   - Display best lap time
   - Show player speed (km/h or pixels/sec)
-  
+
 - [ ] Implement debug overlay (game/ui/debug_overlay.py)
   - Toggle with F1 key
   - Display FPS counter
@@ -137,7 +139,7 @@
   - Adjust steering toward next checkpoint
   - Respect track boundaries
   - Basic speed variation
-  
+
 - [ ] Implement procedural track generation (Advanced)
   - Generate random track layouts
   - Create checkpoint sequences
@@ -155,12 +157,12 @@
   - Collision detection
   - Lap counting logic
   - Track loading validation
-  
+
 - [ ] Configure PyInstaller build (build_executable.py)
   - One-file executable mode
   - Include all game assets
   - Handle dependencies properly
-  
+
 - [ ] Create CI/CD pipeline (.github/workflows/ci.yml)
   - Install dependencies
   - Run pytest suite
@@ -247,7 +249,7 @@ Each GitHub issue should include:
 
 ## Notes & Technical Decisions
 
-1. **Arcade Engine Version**: Using latest stable version for best features
+1. **Arcade Engine Version**: Using latest stable version (>=2.30.0) for best features
 2. **Window Resolution**: 1280x720 (HD) as base, scalable
 3. **Physics Delta Time**: Frame-rate independent calculations using dt parameter
 4. **Track Format**: JSON for flexibility and easy modification without code changes
