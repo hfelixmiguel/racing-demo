@@ -1,9 +1,8 @@
 """
-WSGI Application Entry Point for Vercel Deployment
+Flask Application for 2D Racing Game Demo API
 
-This module serves as the main entry point for the Flask application
-when deployed on Vercel. It provides WSGI compatibility and handles
-HTTP requests from the Vercel platform.
+This module contains the main Flask application that serves as the REST API
+for the racing game demo when deployed on Vercel.
 """
 
 from flask import Flask, jsonify, request
@@ -93,13 +92,15 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     """Handle 500 errors."""
+    import traceback
+    logger = logging.getLogger(__name__)
+    logger.error("Internal server error", exc_info=True)
     return jsonify({
         'error': 'Internal Server Error',
         'message': 'An unexpected error occurred'
     }), 500
 
 
-# WSGI Entry Point for Vercel
 if __name__ == '__main__':
-    # Only run development server when executed directly
+    """Run the Flask development server."""
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
