@@ -7,6 +7,7 @@ for the racing game demo when deployed on Vercel.
 
 from flask import Flask, jsonify, request
 import os
+import logging
 
 # Create Flask application instance
 app = Flask(__name__)
@@ -92,9 +93,8 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     """Handle 500 errors."""
-    import traceback
     logger = logging.getLogger(__name__)
-    logger.error("Internal server error", exc_info=True)
+    logger.error("Internal server error")
     return jsonify({
         'error': 'Internal Server Error',
         'message': 'An unexpected error occurred'
