@@ -27,26 +27,31 @@ def get_game_html():
     <title>2D Racing Game Demo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #1a1a1a; 
+            color: #fff; 
+            min-height: 100vh;
+        }
         .game-container { 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            min-height: 100vh; 
             padding: 20px; 
         }
         .game-info {
             text-align: center;
-            max-width: 600px;
+            max-width: 700px;
             background: #2d2d2d;
-            padding: 30px;
+            padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .game-title { 
             color: #4CAF50; 
-            font-size: 28px; 
+            font-size: 32px; 
             margin-bottom: 20px;
+            font-weight: bold;
         }
         .status-bar {
             background: #3d3d3d;
@@ -60,65 +65,172 @@ def get_game_html():
             list-style: none;
             text-align: left;
             margin: 20px 0;
+            padding: 0 40px;
         }
         .feature-list li {
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #444;
+            color: #ccc;
         }
-        .feature-list li:last-child { border-bottom: none; }
+        .feature-list li:last-child { 
+            border-bottom: none; 
+        }
         .action-btn {
             background: #4CAF50;
             color: white;
-            padding: 12px 30px;
+            padding: 15px 40px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             margin-top: 20px;
+            transition: all 0.3s ease;
         }
-        .action-btn:hover { background: #45a049; }
+        .action-btn:hover { 
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        .game-section {
+            margin: 30px 0;
+        }
+        .instructions-box {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            margin: 20px 0;
+            font-family: monospace;
+            color: #76e94b;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin-right: 8px;
+        }
+        .info-icon {
+            color: #76e94b;
+        }
+        h3 { 
+            color: #76e94b; 
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        .highlight {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="game-info">
             <h1 class="game-title">🏎️ 2D Racing Game Demo</h1>
-            <p>A top-down racing game built with Python Arcade Engine</p>
+            <p style="color: #aaa; margin-bottom: 30px;">A top-down racing game built with Python Arcade Engine</p>
             
             <div class="status-bar">
-                <span><strong>Status:</strong> Running</span>
+                <span><strong>Status:</strong> <span class="status-indicator"></span>Running</span>
                 <span><strong>Version:</strong> 1.0.0</span>
                 <span><strong>Engine:</strong> Arcade Python Library</span>
             </div>
 
-            <h3 style="color: #4CAF50; margin: 20px 0;">Game Features:</h3>
+            <h3 style="color: #76e94b; margin: 25px 0;">🎮 Start Playing!</h3>
+            
+            <p>The game is ready to play! You can run it locally on your computer:</p>
+            
+            <div class="instructions-box">
+                <pre style="white-space: pre-wrap; word-wrap: break-word;">pip install arcade
+python main.py</pre>
+            </div>
+
+            <h3 style="color: #76e94b; margin: 25px 0;" id="features-title">✅ Game Features:</h3>
             <ul class="feature-list">
-                <li>🎮 Realistic car physics with acceleration, braking, and steering</li>
-                <li>🏁 Multiple configurable tracks from JSON files</li>
-                <li>⏱️ Complete lap counting and timing system</li>
-                <li>🤖 AI opponent that follows checkpoints</li>
-                <li>📷 Smooth camera following the player car</li>
+                <li><strong>🎮 Realistic car physics</strong> with acceleration, braking, and steering</li>
+                <li><strong>🏁 Multiple configurable tracks</strong> from JSON files (Oval, City, Desert)</li>
+                <li><strong>⏱️ Complete lap counting</strong> and timing system</li>
+                <li><strong>🤖 AI opponent</strong> that follows checkpoints</li>
+                <li><strong>📷 Smooth camera</strong> following the player car</li>
             </ul>
 
-            <h3 style="color: #4CAF50; margin: 20px 0;">Controls:</h3>
+            <h3 style="color: #76e94b; margin: 25px 0;">⌨️ Controls:</h3>
             <div class="status-bar" style="margin-bottom: 15px;">
-                <span><strong>Accelerate:</strong> W / Up Arrow</span>
-                <span><strong>Brake:</strong> S / Down Arrow</span>
+                <span><strong>Accelerate:</strong> <span class="highlight">W</span> / <span class="highlight">↑</span></span>
+                <span><strong>Brake:</strong> <span class="highlight">S</span> / <span class="highlight">↓</span></span>
             </div>
             <div class="status-bar">
-                <span><strong>Turn Left:</strong> A / Left Arrow</span>
-                <span><strong>Turn Right:</strong> D / Right Arrow</span>
+                <span><strong>Turn Left:</strong> <span class="highlight">A</span> / <span class="highlight">←</span></span>
+                <span><strong>Turn Right:</strong> <span class="highlight">D</span> / <span class="highlight">→</span></span>
             </div>
 
-            <button class="action-btn" onclick="window.alert('Game is running on Vercel!\\n\\nThe game uses Python Arcade library which requires a native window.\\nFor browser-based gameplay, please check the GitHub repository for instructions.')">🎮 Start Game</button>
+            <button class="action-btn" onclick="showGameInstructions()">🎮 Start Game</button>
+
+            <div id="instructions-panel" style="display: none; margin-top: 20px;">
+                <h3 style="color: #76e94b;">📋 How to Run the Game:</h3>
+                
+                <div class="instructions-box">
+                    <p><strong>Option 1: Quick Start (Recommended)</strong></p>
+                    <pre style="white-space: pre-wrap; word-wrap: break-word;"># Install the Arcade library
+pip install arcade
+
+# Run the game
+python main.py</pre>
+                </div>
+
+                <div class="instructions-box">
+                    <p><strong>Option 2: Build Executable (Windows)</strong></p>
+                    <pre style="white-space: pre-wrap; word-wrap: break-word;">pip install pyinstaller
+python build_executable.py</pre>
+                </div>
+
+                <div class="instructions-box">
+                    <p><strong>Option 3: Run from GitHub</strong></p>
+                    <pre style="white-space: pre-wrap; word-wrap: break-word;"># Clone the repository
+git clone https://github.com/hfelixmiguel/racing-demo.git
+
+cd racing-demo
+pip install arcade
+python main.py</pre>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
+        function showGameInstructions() {
+            const panel = document.getElementById('instructions-panel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                window.scrollTo(0, document.body.scrollHeight);
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
         // Simple interaction to show the page is working
         console.log('Racing Demo - Version 1.0.0');
         console.log('Engine: Arcade Python Library');
         console.log('Status: Running on Vercel');
+
+        // Auto-show instructions after 3 seconds
+        setTimeout(() => {
+            const panel = document.getElementById('instructions-panel');
+            if (!panel || panel.style.display === 'none') {
+                panel.style.display = 'block';
+            }
+        }, 3000);
     </script>
 </body>
 </html>'''
